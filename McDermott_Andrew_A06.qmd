@@ -211,7 +211,13 @@ max_temps <- read_tsv("state_max_temps.tsv") |>
 Calculate the average temperature for each month across the whole data frame (using the data for all three states together).
 
 ```{r}
+mean_temps <- list()
+for(i in c('jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec')){
+  average_temp <- mean(max_temps[[i]])
+  mean_temps[[i]] <- average_temp
+}
 
+mean_temps
 ```
 
 
@@ -226,7 +232,9 @@ Create three new data frames by slicing the data by state.
 No need to print any output here.
 
 ```{r}
-
+temps_co <- max_temps[max_temps$state == "CO", TRUE]
+temps_oh <- max_temps[max_temps$state == "OH", TRUE]
+temps_va <- max_temps[max_temps$state == "VA", TRUE]
 ```
 
 
@@ -247,7 +255,13 @@ Example (this is NOT the answer just an example of what goes in the {}):
 Note: This code should still run successfully even if the numbers were to change.
 
 ```{r}
-
+temps_co$state <- NULL #state names are redundant so removed
+temps_co$annual_med <- apply(temps_co[,-1], 1, median) #exclude year column and calculate medians
+max_year <- temps_co$year[[which.max(temps_co$annual_med)]]
+min_year <- temps_co$year[[which.min(temps_co$annual_med)]]
+max_year_temp <- temps_co$annual_med[[which.max(temps_co$annual_med)]]
+min_year_temp <- temps_co$annual_med[[which.min(temps_co$annual_med)]]
+paste0("The maximum median annual temperature of ", max_year_temp, " occurred in ", max_year, " and the minimum median annual temperature of ", min_year_temp, " occurred in ", min_year, ".")
 ```
 
 
